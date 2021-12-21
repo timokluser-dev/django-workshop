@@ -49,6 +49,15 @@ file: `db/admin.py`
 - register model for django admin
   - `admin.site.register(Model)`
 
+## updating models
+
+when doing changed to the models, pay attention to the following:
+
+- set default or null values for existing entries:
+  - `models.TextField(null=True, ...)` 
+  - _or_ 
+  - `models.TextField(default="some defaults", ...)`
+- when renaming attributes, do one migration only for renaming
 
 ---
 
