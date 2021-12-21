@@ -8,6 +8,13 @@
 - [Django](https://www.djangoproject.com/)
 - [Django Docs v4.0](https://docs.djangoproject.com/en/4.0/)
 
+## setup
+
+- Django v4 Backend
+- Django Debug Toolbar
+- Wagtail CMS
+- GraphQL API
+
 ## create project
 
 - copy .env.sample to .env
@@ -73,6 +80,37 @@ pip freeze > requirements.txt
 :arrow_right: https://docs.wagtail.io/en/stable/getting_started/integrating_into_django.html
 
 → add `'wagtailmedia'` to `INSTALLED_APPS` in settings.py
+
+## Django Debug Toolbar
+
+```bash
+pip install django-debug-toolbar
+pip install django-graphiql-debug-toolbar
+```
+
+:arrow_right: https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+:arrow_right: https://pypi.org/project/django-graphiql-debug-toolbar/
+
+<br>
+
+when using docker:
+
+file: `app/settings.py`
+
+```python
+# ...
+
+if DEBUG:
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
+
+def show_debug_toolbar(request):
+    return DEBUG
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': show_debug_toolbar,
+}
+```
 
 ---
 

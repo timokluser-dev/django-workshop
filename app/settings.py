@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 '''
 import os
+import socket
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
+    'graphiql_debug_toolbar',
     # wagtail
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -60,6 +63,8 @@ INSTALLED_APPS = [
 # will execute backwards
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',  # last execution
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'graphiql_debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -154,4 +159,19 @@ WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.search.backends.database',
     }
+}
+
+# Debug Toolbar
+# with docker
+if DEBUG:
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
+
+
+def show_debug_toolbar(request):
+    return DEBUG
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': show_debug_toolbar,
 }
