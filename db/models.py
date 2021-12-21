@@ -32,6 +32,8 @@ class Category(models.Model):
 
 class Post(models.Model):
     name = models.CharField(max_length=200, blank=False)
+    # file will be uploaded to MEDIA_ROOT/uploads/posts/
+    image = models.ImageField(upload_to='uploads/posts/', blank=True, null=True)
     # on_delete=models.CASCADE => when category was deleted, all corresponding posts are also deleted
     # related_name => `category.posts` contains all posts related to category
     category = models.ForeignKey("db.Category", blank=False, on_delete=models.CASCADE, related_name="posts")
