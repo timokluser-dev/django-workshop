@@ -59,6 +59,21 @@ when doing changed to the models, pay attention to the following:
   - `models.TextField(default="some defaults", ...)`
 - when renaming attributes, do one migration only for renaming
 
+## Wagtail CMS
+
+:information_source: wagtail is currently not compatible with Django 4.
+It will perform a downgrade of Django to version 3 during install.
+
+```bash
+pip install wagtail
+pip install wagtailmedia
+pip freeze > requirements.txt
+```
+
+:arrow_right: https://docs.wagtail.io/en/stable/getting_started/integrating_into_django.html
+
+→ add `'wagtailmedia'` to `INSTALLED_APPS` in settings.py
+
 ---
 
 # Django template
