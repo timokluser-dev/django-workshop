@@ -25,11 +25,30 @@
 
 :arrow_right: [engineering-playbook/python/django_debug/debug.md](https://gitlab.liip.ch/eastside-customs/engineering-playbook/-/blob/master/python/django_debug/debug.md)
 
+## creating new models
+
+file: `db/models.py`
+
+- build models
+- add `__str__(self)` method
+- (add Meta class)
+
 ```bash
-docker-compose up
-# new terminal:
-make bash
+# after model created / changed:
+./manage.py  makemigrations
+
+# apply the newly created migration [for app db]
+./manage.py  migrate [db]
 ```
+→ Make small migrations for better maintainability
+
+<br>
+
+file: `db/admin.py`
+
+- register model for django admin
+  - `admin.site.register(Model)`
+
 
 ---
 
