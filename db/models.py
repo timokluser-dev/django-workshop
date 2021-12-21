@@ -44,6 +44,11 @@ class Post(models.Model):
     # cross table will be auto created by django
     # related_name => `keyword.posts` contains all posts related to keyword
     keywords = models.ManyToManyField("db.Keyword", related_name="posts")
+    # post meta:
+    written_by = models.ForeignKey("auth.User", related_name="posts", null=True, on_delete=models.SET_NULL,
+                                   verbose_name="Author")
+    date_published = models.DateTimeField(auto_now_add=True, blank=True, verbose_name="Published")
+    date_modified = models.DateTimeField(auto_now=True, blank=True, verbose_name="Last Modified")
 
     def __str__(self):
         return f"{self.id} [{self.category}] {self.name}"
