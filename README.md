@@ -21,6 +21,16 @@
 - .docker/Dockerfile (remove comment on line 38)
 - `docker-compose up --build`
 
+## debugging with PyCharm
+
+:arrow_right: [engineering-playbook/python/django_debug/debug.md](https://gitlab.liip.ch/eastside-customs/engineering-playbook/-/blob/master/python/django_debug/debug.md)
+
+```bash
+docker-compose up
+# new terminal:
+make bash
+```
+
 ---
 
 # Django template
