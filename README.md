@@ -71,6 +71,8 @@ when doing changed to the models, pay attention to the following:
 :information_source: wagtail is currently not compatible with Django 4.
 It will perform a downgrade of Django to version 3 during install.
 
+Login: [http://django.what-ever.lo/cms/](http://django.what-ever.lo/cms/)
+
 ```bash
 pip install wagtail
 pip install wagtailmedia
