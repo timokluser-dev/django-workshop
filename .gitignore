@@ -449,3 +449,6 @@ modules.xml
 __pycache__
 .python-version
 static/*
+
+.env
+!.env.sample

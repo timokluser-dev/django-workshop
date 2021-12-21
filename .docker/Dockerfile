@@ -35,7 +35,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY --chown=www-user:www-user . /opt/app-root/src
-#COPY --chown=www-user:www-user app/wsgi.py /opt/app-root/src
+COPY --chown=www-user:www-user app/wsgi.py /opt/app-root/src
 
 EXPOSE 8080
 
