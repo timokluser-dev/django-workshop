@@ -10,7 +10,8 @@ if [ "$1" = '/usr/libexec/s2i/run' ] || [ "$3" = '/usr/libexec/s2i/run' ] || [ "
     python ./manage.py migrate
 
     echo "Load fixtures"
-#    python ./manage.py loaddata app/fixtures/users.json
+    # insert superuser to db
+    python ./manage.py loaddata app/fixtures/users.json
 
     echo "Collect static files"
     python ./manage.py collectstatic --noinput
