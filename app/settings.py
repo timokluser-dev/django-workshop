@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'graphiql_debug_toolbar',
+    # graphql
+    'graphene_django',
     # wagtail
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -159,6 +161,11 @@ WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.search.backends.database',
     }
+}
+
+# GraghQL / Graphene
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema',
 }
 
 # Debug Toolbar
