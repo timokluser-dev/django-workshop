@@ -14,4 +14,6 @@ down::
 
 .PHONY: init
 init::
+		npm install hostile -g
+		sudo hostile set 127.0.0.1 django.what-ever.lo
 		cp -n .env.sample .env

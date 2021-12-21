@@ -17,7 +17,7 @@
 
 ## create project
 
-- copy .env.sample to .env
+- `make init` (will set hosts & create .env)
 - `docker-compose run django bash`
 - `pip freeze` (show dependencies) 
 - `pip install django`
