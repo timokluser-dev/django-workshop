@@ -1,0 +1,54 @@
+version: "3"
+services:
+  traefik:
+    image: "traefik:v2.1.2"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  db:
+    image: mariadb:10.3.22
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    ports:
+    - 3307:3306
+
+  django:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      args:
+        USER_ID: ${UID}
+        GROUP_ID: ${GID}
+    user: "${UID}:${GID}"
+    command: "./manage.py runserver 0.0.0.0:8080"
+    volumes:
+      - ./:/opt/app-root/src
+    depends_on:
+      - db
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`${DJANGO_URL}`)"
+    environment:
+      DJANGO_SECRET_KEY: '${DJANGO_SECRET_KEY}'
+      DJANGO_SETTINGS_MODULE: '${DJANGO_SETTINGS_MODULE}'
+      DJANGO_DB_NAME: '${MYSQL_DATABASE}'
+      DJANGO_DB_USER: '${MYSQL_ROOT_USER}'
+      DJANGO_DB_PW: '${MYSQL_PASSWORD}'
+      DJANGO_DB_HOST: '${DJANGO_DB_HOST}'
+      DJANGO_DB_PORT: '${DJANGO_DB_PORT}'
+    networks:
+      default:
+        aliases:
+          - django.what-ever.lo

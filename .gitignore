@@ -441,3 +441,11 @@ modules.xml
 
 # Support for Project snippet scope
 !.vscode/*.code-snippets
+
+.idea
+.env
+.pytest_cache
+.pylint.d
+__pycache__
+.python-version
+static/*

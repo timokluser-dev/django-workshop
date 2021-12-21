@@ -1,8 +1,23 @@
-# django-workshop
+# Django template
 
-<a href="https://www.djangoproject.com/">
-    <img style="width: 150px;" src="https://static.djangoproject.com/img/logos/django-logo-negative.png" alt="django logo" />
-</a>
+## Add Hosts file
 
-- [Django](https://www.djangoproject.com/)
-- [PyCharm](https://www.jetbrains.com/pycharm/)
+Add the following to your `/etc/hosts` file.
+
+    127.0.0.1       django.what-ever.lo
+
+## Setup environment variables 
+
+    make init
+
+## Docker shortcuts
+
+    make up
+    make down
+    make bash
+
+## Django Admin GUI
+You can access the Admin Gui through [http://django.what-ever.lo/admin/](http://django.what-ever.lo/admin/).
+    
+    Username: admin
+    Password: admin
