@@ -1,0 +1,16 @@
+[
+  {
+    "model": "db.category",
+    "pk": 1,
+    "fields": {
+      "name": "Backend"
+    }
+  },
+  {
+    "model": "db.category",
+    "pk": 2,
+    "fields": {
+      "name": "Frontend"
+    }
+  }
+]

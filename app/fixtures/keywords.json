@@ -1,0 +1,23 @@
+[
+  {
+    "model": "db.keyword",
+    "pk": 1,
+    "fields": {
+      "name": "python"
+    }
+  },
+  {
+    "model": "db.keyword",
+    "pk": 2,
+    "fields": {
+      "name": "javascript"
+    }
+  },
+  {
+    "model": "db.keyword",
+    "pk": 3,
+    "fields": {
+      "name": "web"
+    }
+  }
+]
