@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cms/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-    path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG))),  # graphiql only when in DEBUG mode
+    path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG))),  # graphiql only when in DEBUG mode
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 

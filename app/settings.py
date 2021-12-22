@@ -163,7 +163,7 @@ WAGTAILSEARCH_BACKENDS = {
     }
 }
 
-# GraghQL / Graphene
+# GraphQL / Graphene
 GRAPHENE = {
     'SCHEMA': 'api.schema.schema',
 }
