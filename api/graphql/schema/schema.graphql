@@ -1,0 +1,46 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type CategoryType {
+    id: ID!
+    name: String!
+    posts: [PostType!]!
+}
+
+type KeywordType {
+    id: ID!
+    name: String!
+    posts: [PostType!]!
+}
+
+type PostType {
+    category: CategoryType!
+    dateModified: DateTime!
+    datePublished: DateTime!
+    id: ID!
+    image: String
+    keywords: [KeywordType!]!
+    name: String!
+    text: String
+}
+
+type Query {
+    categoryDetail(id: ID!): CategoryType
+    categoryList: [CategoryType]
+    hello: String
+    keywordDetail(id: ID!): KeywordType
+    keywordList: [KeywordType]
+    postDetail(id: ID!): PostType
+    postList(categoryId: ID, keywordId: ID): [PostType]
+}
+
+"""
+
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime

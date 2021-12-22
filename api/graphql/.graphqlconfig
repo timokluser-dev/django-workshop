@@ -1,0 +1,15 @@
+{
+  "name": "Django GraphQL",
+  "schemaPath": "schema/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://django.what-ever.lo/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": false
+      }
+    }
+  }
+}
