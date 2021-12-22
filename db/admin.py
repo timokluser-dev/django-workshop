@@ -13,7 +13,7 @@ admin.site.register(Post)
 class PostAdmin(ModelAdmin):
     model = Post
     menu_label = 'Posts'
-    menu_icon = 'doc-empty-inverse'
+    menu_icon = 'doc-empty-inverse'  # icons: https://thegrouchy.dev/general/2015/12/06/wagtail-streamfield-icons.html
     menu_order = 101
     add_to_settings_menu = False
     exclude_from_explorer = False
