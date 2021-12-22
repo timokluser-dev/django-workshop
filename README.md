@@ -19,7 +19,7 @@
 
 - `make init` (will set hosts & create .env)
 - `docker-compose run django bash`
-- `pip freeze` (show dependencies) 
+- `pip freeze` (show dependencies)
 - `pip install django`
 - `pip freeze` (show dependencies)
 - `pip freeze > requirements.txt`
@@ -30,7 +30,8 @@
 
 ## debugging with PyCharm
 
-:arrow_right: [engineering-playbook/python/django_debug/debug.md](https://gitlab.liip.ch/eastside-customs/engineering-playbook/-/blob/master/python/django_debug/debug.md)
+:
+arrow_right: [engineering-playbook/python/django_debug/debug.md](https://gitlab.liip.ch/eastside-customs/engineering-playbook/-/blob/master/python/django_debug/debug.md)
 
 ## creating new models
 
@@ -47,6 +48,7 @@ file: `db/models.py`
 # apply the newly created migration [for app db]
 ./manage.py  migrate [db]
 ```
+
 → Make small migrations for better maintainability
 
 <br>
@@ -54,22 +56,22 @@ file: `db/models.py`
 file: `db/admin.py`
 
 - register model for django admin
-  - `admin.site.register(Model)`
+    - `admin.site.register(Model)`
 
 ## updating models
 
 when doing changed to the models, pay attention to the following:
 
 - set default or null values for existing entries:
-  - `models.TextField(null=True, ...)` 
-  - _or_ 
-  - `models.TextField(default="some defaults", ...)`
+    - `models.TextField(null=True, ...)`
+    - _or_
+    - `models.TextField(default="some defaults", ...)`
 - when renaming attributes, do one migration only for renaming
 
 ## Wagtail CMS
 
-:information_source: wagtail is currently not compatible with Django 4.
-It will perform a downgrade of Django to version 3 during install.
+:information_source: wagtail is currently not compatible with Django 4. It will perform a downgrade of Django to version
+3 during install.
 
 Login: [http://django.what-ever.lo/cms/](http://django.what-ever.lo/cms/)
 
@@ -106,8 +108,10 @@ if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
 
+
 def show_debug_toolbar(request):
     return DEBUG
+
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': show_debug_toolbar,
@@ -140,7 +144,7 @@ Add the following to your `/etc/hosts` file.
 
     127.0.0.1       django.what-ever.lo
 
-## Setup environment variables 
+## Setup environment variables
 
     make init
 
@@ -151,7 +155,8 @@ Add the following to your `/etc/hosts` file.
     make bash
 
 ## Django Admin GUI
+
 You can access the Admin Gui through [http://django.what-ever.lo/admin/](http://django.what-ever.lo/admin/).
-    
+
     Username: admin
     Password: admin
