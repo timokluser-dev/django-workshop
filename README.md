@@ -114,6 +114,22 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 ```
 
+## Graphene
+
+Library for [GraphQL](https://graphql.org/)
+
+```bash
+pip install graphene-django
+```
+
+:arrow_right: https://docs.graphene-python.org/projects/django/en/latest/installation/
+
+Notes regarding GraphQL:
+
+- API Requests are always **POST**
+- API status code is always **200** (no 404)
+    - check for `response.data && !response.errors`
+
 ---
 
 # Django template
