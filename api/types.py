@@ -1,6 +1,7 @@
 from graphene_django import DjangoObjectType
 
 from db.models import Category, Keyword, Post
+from django.contrib.auth import get_user_model
 
 
 class CategoryType(DjangoObjectType):
@@ -21,3 +22,9 @@ class PostType(DjangoObjectType):
     class Meta:
         model = Post
         fields = '__all__'
+
+
+class UserType(DjangoObjectType):
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'first_name', 'last_name', 'posts',)

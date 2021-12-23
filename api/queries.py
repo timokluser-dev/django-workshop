@@ -1,7 +1,8 @@
 import graphene
 
 from db.models import Category, Keyword, Post
-from api.types import CategoryType, KeywordType, PostType
+from django.contrib.auth import get_user_model
+from api.types import CategoryType, KeywordType, PostType, UserType
 
 
 class HelloQuery(graphene.ObjectType):
@@ -56,3 +57,12 @@ class PostQuery(graphene.ObjectType):
 
     def resolve_post_detail(self, info, id, **kwargs):
         return Post.objects.get(id=id)
+
+
+class UserQuery(graphene.ObjectType):
+    # scalars: parameters for queries
+    # https://docs.graphene-python.org/en/latest/types/scalars/
+    user_detail = graphene.Field(UserType, username=graphene.String(required=True))
+
+    def resolve_user_detail(self, info, username, **kwargs):
+        return get_user_model().objects.get(username=username)
