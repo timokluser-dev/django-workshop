@@ -1,0 +1,18 @@
+#gql`{
+#  "post": {
+#    "name":"hello world",
+#    "text": "hello from GraphQL",
+#    "category": 1,
+#    "writtenBy": 1,
+#    "keywords": [1]
+#  }
+#}`
+
+mutation CreatePostMutation($post: PostMutationInput!) {
+  createPost(input: $post) {
+    post {
+      id
+      name
+    }
+  }
+}

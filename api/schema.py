@@ -1,6 +1,6 @@
 import graphene
 from api.queries import HelloQuery, CategoryQuery, KeywordQuery, PostQuery, UserQuery
-# from api.mutations import
+from api.mutations import PostMutation
 
 
 # general Query class
@@ -10,8 +10,8 @@ class Query(HelloQuery, CategoryQuery, KeywordQuery, PostQuery, UserQuery):
     pass
 
 
-# class Mutation():
-#     pass
+class Mutation(PostMutation):
+    pass
 
 
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)
