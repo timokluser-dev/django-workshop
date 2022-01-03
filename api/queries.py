@@ -56,7 +56,7 @@ class PostQuery(graphene.ObjectType):
         return Post.objects.select_related("category").prefetch_related("keywords").filter(**filters)
 
     def resolve_post_detail(self, info, id, **kwargs):
-        return Post.objects.get(id=id)
+        return Post.objects.select_related("category").prefetch_related("keywords").get(id=id)
 
 
 class UserQuery(graphene.ObjectType):
