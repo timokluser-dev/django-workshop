@@ -65,4 +65,4 @@ class UserQuery(graphene.ObjectType):
     user_detail = graphene.Field(UserType, username=graphene.String(required=True))
 
     def resolve_user_detail(self, info, username, **kwargs):
-        return get_user_model().objects.get(username=username)
+        return get_user_model().objects.prefetch_related("posts").get(username=username)
