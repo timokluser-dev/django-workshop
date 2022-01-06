@@ -1,4 +1,5 @@
 import graphene
+from graphql_jwt.decorators import login_required
 
 from db.models import Category, Keyword, Post
 from django.contrib.auth import get_user_model
@@ -16,6 +17,7 @@ class CategoryQuery(graphene.ObjectType):
     category_detail = graphene.Field(CategoryType, id=graphene.ID(required=True))
 
     # prefix: resolve_<field>
+    @login_required
     def resolve_category_list(self, info, **kwargs):
         # models.Model.objects.all()
         return Category.objects.all()
@@ -24,6 +26,7 @@ class CategoryQuery(graphene.ObjectType):
     #   my_func(hello="world")
     # args = list of arguments -> array
     #   my_func("hello", "world")
+    @login_required
     def resolve_category_detail(self, info, id, **kwargs):
         return Category.objects.get(id=id)  # Category.objects.get(id=kwargs.get('id'))
 
@@ -32,9 +35,11 @@ class KeywordQuery(graphene.ObjectType):
     keyword_list = graphene.List(KeywordType)
     keyword_detail = graphene.Field(KeywordType, id=graphene.ID(required=True))
 
+    @login_required
     def resolve_keyword_list(self, info, **kwargs):
         return Keyword.objects.all()
 
+    @login_required
     def resolve_keyword_detail(self, info, id, **kwargs):
         return Keyword.objects.get(id=id)
 
@@ -63,6 +68,13 @@ class UserQuery(graphene.ObjectType):
     # scalars: parameters for queries
     # https://docs.graphene-python.org/en/latest/types/scalars/
     user_detail = graphene.Field(UserType, username=graphene.String(required=True))
+    me = graphene.Field(UserType)
 
+    @login_required
     def resolve_user_detail(self, info, username, **kwargs):
         return get_user_model().objects.prefetch_related("posts").get(username=username)
+
+    @login_required
+    def resolve_me(self, info, **kwargs):
+        # current user: info.context.user
+        return get_user_model().objects.prefetch_related("posts").get(username=info.context.user.username)
