@@ -27,4 +27,4 @@ class PostType(DjangoObjectType):
 class UserType(DjangoObjectType):
     class Meta:
         model = get_user_model()
-        fields = ('username', 'first_name', 'last_name', 'posts',)
+        fields = ('id', 'username', 'first_name', 'last_name', 'posts',)
