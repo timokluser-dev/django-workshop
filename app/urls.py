@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.views.decorators.csrf import csrf_exempt
 
 from graphene_django.views import GraphQLView
+from graphql_jwt.decorators import jwt_cookie
 
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
@@ -28,7 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('cms/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-    path('graphql', csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG))),  # graphiql only when in DEBUG mode
+    # graphiql only when in DEBUG mode
+    path('graphql', jwt_cookie(csrf_exempt(GraphQLView.as_view(graphiql=settings.DEBUG)))),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 
