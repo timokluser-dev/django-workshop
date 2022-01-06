@@ -134,6 +134,10 @@ Notes regarding GraphQL:
 - API status code is always **200** (no 404)
     - check for `response.data && !response.errors`
 
+## JWT Authorization
+
+:arrow_right: https://django-graphql-jwt.domake.io/index.html
+
 ---
 
 # Django template
