@@ -2,6 +2,8 @@ import graphene
 import graphql_jwt
 from graphql_jwt.decorators import permission_required, login_required
 from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphene_file_upload.scalars import Upload
+from PIL import Image
 
 from api.inputs import PostInput
 from db.models import Post
@@ -72,9 +74,44 @@ class UpdatePost(graphene.Mutation):
         return UpdatePost(success=True, errors=None)
 
 
+class UploadPostImage(graphene.Mutation):
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+
+    class Arguments:
+        id = graphene.ID(required=True)
+        image = Upload(required=True)
+
+    @classmethod
+    @login_required
+    @permission_required("db.update_post")
+    def mutate(cls, root, info, image, id=None, **kwargs):
+        try:
+            post = Post.objects.get(id=id)
+        except Post.DoesNotExist:
+            raise Exception('Post Not Found')
+
+        if post.written_by != info.context.user:
+            raise Exception('Forbidden')
+
+        try:
+            image_to_verify = Image.open(image)
+            image_to_verify.verify()
+        except Exception:
+            raise Exception('No Image provided')
+
+        try:
+            post.image.save(image.name, image.file)
+        except Exception as e:
+            return UploadPostImage(success=False, errors=[str(e)])
+
+        return UploadPostImage(success=True, errors=None)
+
+
 class PostMutation(graphene.ObjectType):
     create_post = CreatePost.Field()
     update_post = UpdatePost.Field()
+    upload_post_image = UploadPostImage.Field()
 
 
 class JwtMutation(graphene.ObjectType):
