@@ -65,7 +65,7 @@ class UpdatePost(graphene.Mutation):
         except Post.DoesNotExist:
             raise Exception('Post Not Found')
 
-        if post.written_by != info.context.user:
+        if post.written_by != info.context.user and not info.context.user.is_superuser:
             raise Exception('Forbidden')
 
         post.name = input.name
@@ -94,7 +94,7 @@ class UploadPostImage(graphene.Mutation):
         except Post.DoesNotExist:
             raise Exception('Post Not Found')
 
-        if post.written_by != info.context.user:
+        if post.written_by != info.context.user and not info.context.user.is_superuser:
             raise Exception('Forbidden')
 
         try:
