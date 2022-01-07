@@ -6,6 +6,7 @@ from graphene_file_upload.scalars import Upload
 from PIL import Image
 
 from api.inputs import PostInput
+from api.types import PostType
 from db.models import Post
 
 
@@ -26,6 +27,7 @@ from db.models import Post
 class CreatePost(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
+    data = graphene.Field(PostType)
 
     class Arguments:
         input = PostInput(required=True)
@@ -42,12 +44,13 @@ class CreatePost(graphene.Mutation):
         post.written_by_id = info.context.user.id
         post.save()
         post.keywords.set(input.keywords)
-        return CreatePost(success=True, errors=None)
+        return CreatePost(success=True, errors=None, data=post)
 
 
 class UpdatePost(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
+    data = graphene.Field(PostType)
 
     class Arguments:
         id = graphene.ID(required=True)
@@ -71,7 +74,7 @@ class UpdatePost(graphene.Mutation):
         post.category_id = input.category_id
         post.save()
         post.keywords.set(input.keywords)
-        return UpdatePost(success=True, errors=None)
+        return UpdatePost(success=True, errors=None, data=post)
 
 
 class UploadPostImage(graphene.Mutation):
