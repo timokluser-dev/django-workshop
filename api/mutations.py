@@ -5,76 +5,32 @@ from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphene_file_upload.scalars import Upload
 from PIL import Image
 
-from api.inputs import PostInput
+from api.forms import PostForm
 from api.types import PostType
 from db.models import Post
 
 
 # Django Form
-# see: https://medium.com/@aacha002/graphql-django-djangomodelformmutation-walkthrough-b0d62364b1ee
-# class PostMutation(DjangoModelFormMutation):
-#     post = graphene.Field(PostType)
-#
-#     class Meta:
-#         form_class = PostForm
-#
-#
-# class PostMutation(graphene.ObjectType):
-#     create_post = PostMutation.Field()
-#     update_post = PostMutation.Field()
+class PostMutation(DjangoModelFormMutation):
+    post = graphene.Field(PostType)
 
-
-class CreatePost(graphene.Mutation):
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-    data = graphene.Field(PostType)
-
-    class Arguments:
-        input = PostInput(required=True)
+    class Meta:
+        form_class = PostForm
 
     @classmethod
     @login_required
-    @permission_required("db.create_post")
     def mutate(cls, root, info, input, **kwargs):
-        post = Post()
-        post.name = input.name
-        post.text = input.text
-        post.image = input.image
-        post.category_id = input.category_id
-        post.written_by_id = info.context.user.id
-        post.save()
-        post.keywords.set(input.keywords)
-        return CreatePost(success=True, errors=None, data=post)
+        if input.id:
+            if not info.context.user.has_perm('db.update_post') and not info.context.user.is_superuser:
+                raise Exception("you don't have permission to update posts")
+        else:
+            if not info.context.user.has_perm('db.create_post'):
+                raise Exception("you don't have permission to create posts")
 
+        if input.written_by != info.context.user and not info.context.user.is_superuser:
+            raise Exception('you can only create and update your own posts')
 
-class UpdatePost(graphene.Mutation):
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-    data = graphene.Field(PostType)
-
-    class Arguments:
-        id = graphene.ID(required=True)
-        input = PostInput(required=True)
-
-    @classmethod
-    @login_required
-    @permission_required("db.update_post")
-    def mutate(cls, root, info, id, input, **kwargs):
-        try:
-            post = Post.objects.get(id=id)
-        except Post.DoesNotExist:
-            raise Exception('Post Not Found')
-
-        if post.written_by != info.context.user and not info.context.user.is_superuser:
-            raise Exception('Forbidden')
-
-        post.name = input.name
-        post.text = input.text
-        post.image = input.image
-        post.category_id = input.category_id
-        post.save()
-        post.keywords.set(input.keywords)
-        return UpdatePost(success=True, errors=None, data=post)
+        return super().mutate(root, info, input)
 
 
 class UploadPostImage(graphene.Mutation):
@@ -112,8 +68,8 @@ class UploadPostImage(graphene.Mutation):
 
 
 class PostMutation(graphene.ObjectType):
-    create_post = CreatePost.Field()
-    update_post = UpdatePost.Field()
+    create_post = PostMutation.Field()
+    update_post = PostMutation.Field()
     upload_post_image = UploadPostImage.Field()
 
 
