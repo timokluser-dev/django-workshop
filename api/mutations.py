@@ -1,10 +1,12 @@
 import graphene
 import graphql_jwt
+from graphene_django.types import ErrorType
 from graphql_jwt.decorators import permission_required, login_required
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphene_file_upload.scalars import Upload
 from PIL import Image
 
+from api.errors import NoUpdatePostPermissionError, NoCreatePostPermissionError, NotYourPostError
 from api.forms import PostForm
 from api.types import PostType
 from db.models import Post
@@ -13,6 +15,7 @@ from db.models import Post
 # Django Form
 class PostMutation(DjangoModelFormMutation):
     post = graphene.Field(PostType)
+    errors = graphene.List(ErrorType)
 
     class Meta:
         form_class = PostForm
@@ -22,13 +25,27 @@ class PostMutation(DjangoModelFormMutation):
     def mutate(cls, root, info, input, **kwargs):
         if input.id:
             if not info.context.user.has_perm('db.update_post') and not info.context.user.is_superuser:
-                raise Exception("you don't have permission to update posts")
+                return cls(
+                    errors=(
+                        NoUpdatePostPermissionError(field='post',
+                                                    messages=("you don't have permission to update posts",)),
+                    )
+                )
         else:
             if not info.context.user.has_perm('db.create_post'):
-                raise Exception("you don't have permission to create posts")
+                return cls(
+                    errors=(
+                        NoCreatePostPermissionError(field='post',
+                                                    messages=("you don't have permission to create posts",)),
+                    )
+                )
 
-        if input.written_by != info.context.user and not info.context.user.is_superuser:
-            raise Exception('you can only create and update your own posts')
+        if int(input.written_by) != info.context.user.id and not info.context.user.is_superuser:
+            return cls(
+                errors=(
+                    NotYourPostError(field='writtenBy', messages=('you can only create and update your own posts',)),
+                )
+            )
 
         return super().mutate(root, info, input)
 
