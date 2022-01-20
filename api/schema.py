@@ -1,6 +1,6 @@
 import graphene
 from api.queries import HelloQuery, CategoryQuery, KeywordQuery, PostQuery, UserQuery
-from api.mutations import PostMutation, JwtMutation
+from api.mutations import PostMutation, JwtMutation, CategoryMutation, KeywordMutation
 
 
 # general Query class
@@ -10,7 +10,7 @@ class Query(HelloQuery, CategoryQuery, KeywordQuery, PostQuery, UserQuery):
     pass
 
 
-class Mutation(PostMutation, JwtMutation):
+class Mutation(PostMutation, CategoryMutation, KeywordMutation, JwtMutation):
     pass
 
 
