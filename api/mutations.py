@@ -1,45 +1,43 @@
 import graphene
 import graphql_jwt
-from graphene_django.types import ErrorType
 from graphql_jwt.decorators import permission_required, login_required
 from graphene_django.forms.mutation import DjangoModelFormMutation
 from graphene_file_upload.scalars import Upload
 from PIL import Image
-from graphql_jwt.exceptions import PermissionDenied
 
 from api.errors import GraphqlOutput, non_field_error
-from api.forms import PostForm
+from api.forms import PostForm, CategoryForm, KeywordForm
 from api.inputs import PostInput
-from api.types import PostType
+from api.types import PostType, CategoryType
 from db.models import Post
 
 
 # Django Form
-class PostMutation(DjangoModelFormMutation):
-    post = graphene.Field(PostType)
-    errors = graphene.List(ErrorType)
+class CategoryFormMutation(DjangoModelFormMutation):
+    category = graphene.Field(CategoryType)
 
     class Meta:
-        form_class = PostForm
+        form_class = CategoryForm
 
     @classmethod
     @login_required
+    @permission_required("db.update_category")
     def mutate(cls, root, info, input, **kwargs):
-        if input.id:
-            if not info.context.user.has_perm('db.update_post'):
-                raise PermissionDenied()
-        else:
-            if not info.context.user.has_perm('db.create_post'):
-                raise PermissionDenied()
-
-        if int(input.written_by) != info.context.user.id and not info.context.user.is_superuser:
-            return cls(
-                errors=(
-                    ErrorType(field='writtenBy', messages=('you can only create and update your own posts',)),
-                )
-            )
-
         return super().mutate(root, info, input)
+
+
+class KeywordFormMutation(DjangoModelFormMutation):
+    keyword = graphene.Field(CategoryType)
+
+    class Meta:
+        form_class = KeywordForm
+
+    @classmethod
+    @login_required
+    @permission_required("db.update_keyword")
+    def mutate(cls, root, info, input, **kwargs):
+        return super().mutate(root, info, input)
+
 
 # Manual with Forms
 class UpdatePost(GraphqlOutput, graphene.Mutation):
@@ -141,6 +139,14 @@ class PostMutation(graphene.ObjectType):
     create_post = CreatePost.Field()
     update_post = UpdatePost.Field()
     upload_post_image = UploadPostImage.Field()
+
+
+class CategoryMutation(graphene.ObjectType):
+    update_category = CategoryFormMutation.Field()
+
+
+class KeywordMutation(graphene.ObjectType):
+    update_keyword = KeywordFormMutation.Field()
 
 
 class JwtMutation(graphene.ObjectType):
