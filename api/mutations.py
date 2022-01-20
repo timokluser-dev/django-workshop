@@ -13,6 +13,8 @@ from db.models import Post
 
 
 # Django Form
+# Create Mode: no `id`
+# Update Mode: provide `id` of record to update
 class CategoryFormMutation(DjangoModelFormMutation):
     category = graphene.Field(CategoryType)
 
