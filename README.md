@@ -138,6 +138,8 @@ Notes regarding GraphQL:
 
 :arrow_right: https://django-graphql-jwt.domake.io/index.html
 
+Default Permissions: https://docs.djangoproject.com/en/4.0/topics/auth/default/#default-permissions
+
 ---
 
 # Django template
