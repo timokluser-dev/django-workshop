@@ -7,7 +7,9 @@ from graphene_file_upload.scalars import Upload
 from PIL import Image
 from graphql_jwt.exceptions import PermissionDenied
 
+from api.errors import GraphqlOutput, non_field_error
 from api.forms import PostForm
+from api.inputs import PostInput
 from api.types import PostType
 from db.models import Post
 
@@ -38,6 +40,67 @@ class PostMutation(DjangoModelFormMutation):
             )
 
         return super().mutate(root, info, input)
+
+# Manual with Forms
+class UpdatePost(GraphqlOutput, graphene.Mutation):
+    form_data = graphene.Field(PostType)
+
+    class Arguments:
+        id = graphene.ID()
+        post = PostInput(required=True)
+
+    @classmethod
+    @login_required
+    @permission_required("db.update_post")
+    def mutate(cls, root, info, id, post, **kwargs):
+        errors = {}
+        user = info.context.user
+        post_item = Post.objects.get(pk=id)
+        try:
+            if post_item.written_by != user.id and not user.is_superuser:
+                return UpdatePost(success=False, errors=non_field_error('Cannot update posts of other users'))
+
+            # manually set owner of post
+            post['written_by'] = post_item.written_by_id
+
+            form = PostForm(instance=post_item, data=post)
+            if form.is_valid():
+                form.save()
+                return UpdatePost(success=True, form_data=form.instance)
+            errors.update(form.errors.get_json_data())
+            return UpdatePost(success=False, errors=errors)
+        except BaseException:
+            message = 'Error while trying to update post'
+            errors.update(non_field_error(message))
+            return UpdatePost(success=False, errors=errors)
+
+
+class CreatePost(GraphqlOutput, graphene.Mutation):
+    form_data = graphene.Field(PostType)
+
+    class Arguments:
+        post = PostInput(required=True)
+
+    @classmethod
+    @login_required
+    @permission_required("db.create_post")
+    def mutate(cls, root, info, post, **kwargs):
+        errors = {}
+        user = info.context.user
+        try:
+            # set owner
+            post['written_by'] = user.id
+
+            form = PostForm(data=post)
+            if form.is_valid():
+                form.save()
+                return CreatePost(success=True, form_data=form.instance)
+            errors.update(form.errors.get_json_data())
+            return CreatePost(success=False, errors=errors)
+        except BaseException:
+            message = 'Error while trying to create post'
+            errors.update(non_field_error(message))
+            return CreatePost(success=False, errors=errors)
 
 
 class UploadPostImage(graphene.Mutation):
@@ -75,8 +138,8 @@ class UploadPostImage(graphene.Mutation):
 
 
 class PostMutation(graphene.ObjectType):
-    create_post = PostMutation.Field()
-    update_post = PostMutation.Field()
+    create_post = CreatePost.Field()
+    update_post = UpdatePost.Field()
     upload_post_image = UploadPostImage.Field()
 
 
