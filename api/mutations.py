@@ -144,10 +144,12 @@ class PostMutation(graphene.ObjectType):
 
 
 class CategoryMutation(graphene.ObjectType):
+    create_category = CategoryFormMutation.Field()
     update_category = CategoryFormMutation.Field()
 
 
 class KeywordMutation(graphene.ObjectType):
+    create_keyword = KeywordFormMutation.Field()
     update_keyword = KeywordFormMutation.Field()
 
 
