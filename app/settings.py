@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'taggit',
     # custom apps
     'db',
+    'api'
 ]
 
 # will execute backwards
