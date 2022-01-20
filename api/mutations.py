@@ -24,7 +24,7 @@ class PostMutation(DjangoModelFormMutation):
     @login_required
     def mutate(cls, root, info, input, **kwargs):
         if input.id:
-            if not info.context.user.has_perm('db.update_post') and not info.context.user.is_superuser:
+            if not info.context.user.has_perm('db.update_post'):
                 return cls(
                     errors=(
                         NoUpdatePostPermissionError(field='post',
