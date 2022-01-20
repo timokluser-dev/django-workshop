@@ -138,23 +138,23 @@ class UploadPostImage(graphene.Mutation):
 
 
 class PostMutation(graphene.ObjectType):
-    create_post = CreatePost.Field()
-    update_post = UpdatePost.Field()
-    upload_post_image = UploadPostImage.Field()
+    create_post = CreatePost.Field(description="Create a new Post for logged in User")
+    update_post = UpdatePost.Field(description="Update Users Post by Id")
+    upload_post_image = UploadPostImage.Field(description="Upload Image for Users Post")
 
 
 class CategoryMutation(graphene.ObjectType):
-    create_category = CategoryFormMutation.Field()
-    update_category = CategoryFormMutation.Field()
+    create_category = CategoryFormMutation.Field(description="Create a new Category")
+    update_category = CategoryFormMutation.Field(description="Update Category by Id")
 
 
 class KeywordMutation(graphene.ObjectType):
-    create_keyword = KeywordFormMutation.Field()
-    update_keyword = KeywordFormMutation.Field()
+    create_keyword = KeywordFormMutation.Field(description="Create a new Keyword")
+    update_keyword = KeywordFormMutation.Field(description="Update Keyword by Id")
 
 
 class JwtMutation(graphene.ObjectType):
-    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
-    verify_token = graphql_jwt.Verify.Field()
-    refresh_token = graphql_jwt.Refresh.Field()
-    delete_token = graphql_jwt.DeleteJSONWebTokenCookie.Field()
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field(description="Obtain new JWT Token")
+    verify_token = graphql_jwt.Verify.Field(description="Verify a JWT Token")
+    refresh_token = graphql_jwt.Refresh.Field(description="Obtain Refresh JWT Token")
+    delete_token = graphql_jwt.DeleteJSONWebTokenCookie.Field(description="Revoke a JWT Token")
