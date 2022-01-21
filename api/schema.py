@@ -7,11 +7,13 @@ from api.mutations import PostMutation, JwtMutation, CategoryMutation, KeywordMu
 # all graphql as parent class
 # first class has most weight in inheritance (e.g. if method multiple times)
 class Query(HelloQuery, CategoryQuery, KeywordQuery, PostQuery, UserQuery):
-    pass
+    class Meta:
+        description = 'Queries for fetching data'
 
 
 class Mutation(PostMutation, CategoryMutation, KeywordMutation, JwtMutation):
-    pass
+    class Meta:
+        description = 'Mutations for manipulating data'
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
