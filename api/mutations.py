@@ -46,7 +46,7 @@ class UpdatePost(GraphqlOutput, graphene.Mutation):
     form_data = graphene.Field(PostType)
 
     class Arguments:
-        id = graphene.ID()
+        id = graphene.ID(required=True)
         post = PostInput(required=True)
 
     @classmethod
